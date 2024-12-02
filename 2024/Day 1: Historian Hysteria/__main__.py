@@ -112,5 +112,5 @@ lines = read_file_as_2d_int_tuple()
 # Split and sort the input lines into `lefts` and `rights` lists:
 lefts, rights = split_and_sort_container_as_two_lists(lines)
 
-solution1()
-solution2()
+solution1() # total_dist = 1651298
+solution2() # total_similar = 21306195
