@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 
-from collections import Counter
-from collections.abc import Iterable, Sequence
-from typing import cast
+from collections.abc import Sequence
+from array import array
 
 def read_file_as_2d_int_tuple(filename='input.txt'):
 	"""
@@ -12,109 +11,122 @@ def read_file_as_2d_int_tuple(filename='input.txt'):
 		filename (str): Name of the file to read from. Defaults to 'input.txt'.
 
 	Returns:
-		tuple[tuple[int, int], ...]: A 2D tuple where each inner tuple contains
-		two integers.
+		tuple[array[int], ...]: A tuple where each of its inner uint8 array
+		contains 5 to 8 integers.
 	"""
 
-	with open(filename) as f: return cast(
-		tuple[tuple[int, int], ...],
-		tuple( tuple(map(int, line.split())) for line in f.readlines() )
-	)
+	with open(filename) as f: return *(
+		array('B', map(int, line.split()) ) for line in f.readlines()
+	),
 
 
-def split_and_sort_container_as_two_lists(lines: Iterable[Iterable[int]]):
+def solution_1():
 	"""
-	Splits the input lines into two lists and sorts them.
+	Calculates and prints the total number of safe level reports.
+
+	A safe level report is one where the sequence of integers is either
+	strictly ascending within a specified maximum difference or strictly
+	descending within the same limit.
+
+	Additionally, consecutive levels must not repeat.
+
+	The function reads level reports, checks each report for safety based on
+	the defined criteria, and counts the number of safe reports.
+	"""
+
+	total_safe_level_reports = 0
+
+	for levels in level_reports:
+		if (ascending := is_ascending(levels)) is not None:
+			if ascending:
+				if is_always_ascending(levels): total_safe_level_reports += 1
+			elif is_always_descending(levels): total_safe_level_reports += 1
+
+	# Print the number of reports that contain safe sequence levels:
+	print(f'{total_safe_level_reports = }')
+
+
+def is_ascending(ints: Sequence[int]):
+	"""
+	Determines if a sequence is initially ascending.
 
 	Arg:
-		lines (Iterable[Iterable[int]]): A 2D iterable containing int values.
+		ints (Sequence[int]): A sequence of integers to check.
 
 	Returns:
-		tuple[tuple[int, ...], tuple[int, ...]]: A 2D tuple containing two
-		sorted lists of integers.
+		Optional[bool]: None if the sequence has fewer than 2 elements or the
+		first two elements are equal. True if the first two elements are in
+		ascending order. False otherwise.
 	"""
 
-	# `pair` is a zip containing the input lines split as 2 containers:
-	pair: zip[Iterable[int]] = zip(*lines, strict=True)
-
-	# Sort `pair` as `lefts` & `rights` int lists:
-	lefts, rights = map(sorted, pair)
-
-	# Return both sorted lists as a 2D tuple of integers:
-	return tuple(lefts), tuple(rights)
+	return None if len(ints) < 2 or ints[0] == ints[1] else ints[0] < ints[1]
 
 
-def solution1():
+def is_always_ascending(ints: Sequence[int], max_diff=3):
 	"""
-	Calculates and prints the total distance between corresponding
-	elements of the sorted pairs of values.
-	"""
-
-	# Calculate the total distance:
-	total_dist = total_distance(lefts, rights)
-
-	# Print the total_distance()'s result:
-	print(f'{total_dist = }')
-
-
-def total_distance(lefts: Sequence[int], rights: Sequence[int]):
-	"""
-	Calculates the total distance as the sum of the absolute differences
-	between corresponding elements of the sorted pairs of values.
+	Checks if the sequence of positive integers is strictly ascending with
+	differences	within a specified maximum difference.
 
 	Args:
-		lefts (Sequence[int]): A sequence containing the left integers.
+		ints (Sequence[int]): A sequence of positive integers to check.
 
-		rights (Sequence[int]): A sequence containing the right integers.
+		max_diff (int): Maximum allowed difference between consecutive integers.
 
-	Returns:
-		int: The total sum of the absolute differences between corresponding
-		elements of the `lefts` and `rights` sequences. This value represents 
-		the total distance between the sorted pairs of values.
+    Returns:
+		bool: True if the sequence is strictly ascending and each difference is
+		within max_diff. False if any two adjacent elements are equal,
+		descending, or exceed max_diff.
 	"""
 
-	# Calculate the total sum of the absolute differences for each pair:
-	return sum( abs(rights[idx] - lefts[idx]) for idx in range(len(lefts)) )
+	for i in range(len(ints) - 1):
+		diff = ints[i + 1] - ints[i]
+		if diff <= 0 or diff > max_diff: return False
+	return True
 
 
-def solution2():
+def is_always_descending(ints: Sequence[int], max_diff=3):
 	"""
-	Calculates and prints the total similarity between the left
-	integers and the count of the right integers.
-	"""
-
-	# Calculate the total similarity:
-	total_similar = total_similarity(lefts, Counter(rights))
-
-	# Print the total_similarity()'s result:
-	print(f'{total_similar = }')
-
-
-def total_similarity(ints: Iterable[int], counter: dict[int, int]):
-	"""
-	Calculates the total similarity as the sum of the products of integers and
-	their counts.
+	Checks if the sequence of positive integers is strictly descending with
+	differences	within a specified maximum difference.
 
 	Args:
-		ints (Iterable[int]): An iterable containing integer values.
+		ints (Sequence[int]): A sequence of positive integers to check.
 
-		counter (dict[int, int]): A counter dict containing the counts of 
-		id integer values.
+		max_diff (int): Maximum allowed difference between consecutive integers.
 
-	Returns:
-		int: The total sum of the products of integers and their counts. This
-		value represents the total similarity.
+    Returns:
+		bool: True if the sequence is strictly descending and each difference is
+		within max_diff. False if any two adjacent elements are equal,
+		ascending, or exceed max_diff.
 	"""
 
-	# Calculate the total sum of the products for each integer and its count:
-	return sum( id * counter[id] for id in ints )
+	for i in range(len(ints) - 1):
+		diff = ints[i] - ints[i + 1]
+		if diff <= 0 or diff > max_diff: return False
+	return True
 
 
-# Read the input file and convert it to a 2D tuple of integers:
-lines = read_file_as_2d_int_tuple()
+def solution_2():
+	"""
 
-# Split and sort the input lines into `lefts` and `rights` lists:
-lefts, rights = split_and_sort_container_as_two_lists(lines)
+	"""
 
-solution1() # total_dist = 1651298
-solution2() # total_similar = 21306195
+	total_safe_level_reports = 0
+
+	# Print the number of reports that contain safe sequence levels:
+	print(f'{total_safe_level_reports = }')
+
+
+def is_always_going_same_direction(ints: Sequence[int], tolerances=1, diff=3):
+	"""
+
+	"""
+
+
+
+
+# Read the input file and convert it to a tuple of uint8 arrays:
+level_reports = read_file_as_2d_int_tuple()
+
+solution_1() # total_safe_level_reports = 663
+solution_2() # total_safe_level_reports = 

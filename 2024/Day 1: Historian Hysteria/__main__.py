@@ -18,7 +18,7 @@ def read_file_as_2d_int_tuple(filename='input.txt'):
 
 	with open(filename) as f: return cast(
 		tuple[tuple[int, int], ...],
-		tuple( tuple(map(int, line.split())) for line in f.readlines() )
+		tuple( tuple( map(int, line.split()) ) for line in f.readlines() )
 	)
 
 
@@ -44,7 +44,7 @@ def split_and_sort_container_as_two_lists(lines: Iterable[Iterable[int]]):
 	return tuple(lefts), tuple(rights)
 
 
-def solution1():
+def solution_1():
 	"""
 	Calculates and prints the total distance between corresponding
 	elements of the sorted pairs of values.
@@ -77,7 +77,7 @@ def total_distance(lefts: Sequence[int], rights: Sequence[int]):
 	return sum( abs(rights[idx] - lefts[idx]) for idx in range(len(lefts)) )
 
 
-def solution2():
+def solution_2():
 	"""
 	Calculates and prints the total similarity between the left
 	integers and the count of the right integers.
@@ -116,5 +116,5 @@ lines = read_file_as_2d_int_tuple()
 # Split and sort the input lines into `lefts` and `rights` lists:
 lefts, rights = split_and_sort_container_as_two_lists(lines)
 
-solution1() # total_dist = 1651298
-solution2() # total_similar = 21306195
+solution_1() # total_dist = 1651298
+solution_2() # total_similar = 21306195
