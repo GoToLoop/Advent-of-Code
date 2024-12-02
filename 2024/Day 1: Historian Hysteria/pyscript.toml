@@ -3,6 +3,7 @@ version = '1.0.0'
 author_name = 'GoToLoop'
 license = 'Unlicense'
 description = 'https://AdventOfCode.com/2024'
+url = 'https://GitHub.com/GoToLoop/Advent-of-Code'
 
 [files]
 "input.txt" = ''
