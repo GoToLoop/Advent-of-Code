@@ -12,7 +12,8 @@ def read_file_as_2d_int_tuple(filename='input.txt'):
 		filename (str): Name of the file to read from. Defaults to 'input.txt'.
 
 	Returns:
-		tuple: A 2D tuple where each inner tuple contains two integers.
+		tuple[tuple[int, int], ...]: A 2D tuple where each inner tuple contains
+		two integers.
 	"""
 
 	with open(filename) as f: return cast(
@@ -29,7 +30,8 @@ def split_and_sort_container_as_two_lists(lines: Iterable[Iterable[int]]):
 		lines (Iterable[Iterable[int]]): A 2D iterable containing int values.
 
 	Returns:
-		tuple: A 2D tuple containing two sorted lists of integers.
+		tuple[tuple[int, ...], tuple[int, ...]]: A 2D tuple containing two
+		sorted lists of integers.
 	"""
 
 	# `pair` is a zip containing the input lines split as 2 containers:
