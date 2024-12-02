@@ -89,15 +89,15 @@ def solution2():
 	print(f'{total_similar = }')
 
 
-def total_similarity(ints: Iterable[int], counter: Counter[int]):
+def total_similarity(ints: Iterable[int], counter: dict[int,int]):
 	"""
 	Calculates the total similarity as the sum of the products of integers and
 	their counts.
 
 	Args:
 		ints (Iterable[int]): An iterable containing integer values.
-		counter (Counter[int]): A Counter object containing the counts of 
-		integer values.
+		counter (Counter[int]): A counter dict containing the counts of 
+		id integer values.
 
 	Returns:
 		int: The total sum of the products of integers and their counts. This
