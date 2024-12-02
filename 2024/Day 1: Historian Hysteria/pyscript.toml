@@ -1,0 +1,8 @@
+name = 'Day 1: Historian Hysteria'
+version = '1.0.0'
+author_name = 'GoToLoop'
+license = 'Unlicense'
+description = 'https://AdventOfCode.com/2024'
+
+[files]
+"input.txt" = ''
