@@ -54,7 +54,7 @@ def solution1():
 	total_dist = total_distance(lefts, rights)
 
 	# Print the total_distance()'s result:
-	print(f'{total_dist = }') # 1651298
+	print(f'{total_dist = }')
 
 
 def total_distance(lefts: Sequence[int], rights: Sequence[int]):
