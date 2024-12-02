@@ -1,8 +1,8 @@
-name = 'Day 1: Historian Hysteria'
+name = 'Day 2: Red-Nosed Reports'
 version = '1.0.0'
 author_name = 'GoToLoop'
 license = 'Unlicense'
-description = 'https://AdventOfCode.com/2024/day/1'
+description = 'https://AdventOfCode.com/2024/day/2'
 url = 'https://GitHub.com/GoToLoop/Advent-of-Code'
 
 [files]

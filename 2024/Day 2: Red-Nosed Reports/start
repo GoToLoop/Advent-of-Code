@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Generate a random port between 10000 and 50000
+port=$((RANDOM % 40000 + 10000))
+
+# Open the default web browser to the local server URL
+python -m webbrowser "http://localhost:$port"
+
+# Start a simple HTTP server with Python
+python -m http.server $port
