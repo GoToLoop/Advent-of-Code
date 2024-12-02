@@ -46,7 +46,7 @@ def split_and_sort_container_as_two_lists(lines: Iterable[Iterable[int]]):
 
 def solution1():
 	"""
-	Calculate and print the total distance between corresponding
+	Calculates and prints the total distance between corresponding
 	elements of the sorted pairs of values.
 	"""
 
@@ -78,7 +78,7 @@ def total_distance(lefts: Sequence[int], rights: Sequence[int]):
 
 def solution2():
 	"""
-	Calculate and print the total similarity between the left
+	Calculates and prints the total similarity between the left
 	integers and the count of the right integers.
 	"""
 
