@@ -64,6 +64,7 @@ def total_distance(lefts: Sequence[int], rights: Sequence[int]):
 
 	Args:
 		lefts (Sequence[int]): A sequence containing the left integers.
+
 		rights (Sequence[int]): A sequence containing the right integers.
 
 	Returns:
@@ -96,6 +97,7 @@ def total_similarity(ints: Iterable[int], counter: dict[int, int]):
 
 	Args:
 		ints (Iterable[int]): An iterable containing integer values.
+
 		counter (dict[int, int]): A counter dict containing the counts of 
 		id integer values.
 
