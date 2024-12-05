@@ -51,7 +51,7 @@ def is_ascending(ints: Sequence[int]):
 	Determines if a sequence is initially ascending.
 
 	Arg:
-		ints (Sequence[int]): A sequence of integers to check.
+		ints (Sequence[int]): A sequence of positive integer levels to check.
 
 	Returns:
 		Optional[bool]: None if the sequence has fewer than 2 elements or the
@@ -122,7 +122,7 @@ def is_really_ascending(ints: Sequence[int], max_fails=1):
 	Determines if a sequence is initially ascending.
 
 	Args:
-		ints (Sequence[int]): A sequence of integer levels to check.
+		ints (Sequence[int]): A sequence of positive integer levels to check.
 
 		max_fails (int): Maximum tolerance for bad level readings.
 
