@@ -165,7 +165,7 @@ def is_always_going_same_direction(ints: Sequence[int], max_fails=1, max_dif=3):
 				del clone[i]
 				continue
 
-			# Decide whether to remove the left or the right value based on future differences:
+
 			if abs(clone[i + 2] - clone[i]) <= max_dif:
 				del clone[i + 1]
 			else:

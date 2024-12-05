@@ -178,58 +178,56 @@ def is_safe_level_sequence(ints: Sequence[int], max_fails=1, max_dif=3):
 		# direction `up0`:
 		up = dif > 0 if up0 else dif < 0
 
+		# Skip to next iteration if no fail on `dif` level pair comparison:
+		if 0 < dif <= max_dif: i += 1; continue
+
 		# Fails if `dif` is more than `max_dif` or there was no change or
-		# `dif` was negative; meaning an unexpected direction change occurred:
-		if dif <= 0 or dif > max_dif:
+		# `dif` was negative; meaning an unexpected direction change occurred
 
-			# Decrease attempts and return "unsafe" if no attemps are left:
-			if (max_fails := max_fails - 1) < 0: return False
+		# Decrease attempts and return "unsafe" if no attemps are left:
+		if (max_fails := max_fails - 1) < 0: return False
 
-			# Decrease sequence size b/c a `del` has to happen after a fail.
-			# Already at the end; nothing more to compare; so levels are "safe":
-			if i == (tail := tail - 1): break
+		# Decrease sequence size b/c a `del` has to happen after a fail.
+		# Already at the end; nothing more to compare; so levels are "safe":
+		if i == (tail := tail - 1): break
 
-			# If we're checking the head level, lookahead to 3rd level value:
-			if i == 0:
+		# If we're checking the head level, lookahead to 3rd level value:
+		if i == 0:
 
-				# Find range `dif` between 1st & 3rd level values:
-				dif = clone[i+2] - clone[i] if up else clone[i] - clone[i+2]
+			# Find range `dif` between 1st & 3rd level values:
+			dif = clone[i+2] - clone[i] if up else clone[i] - clone[i+2]
 
-				# If it fails, `del` head level & 2nd level becomes the new head
-				# having next loop iteration visiting it:
-				if dif <= 0 or dif > max_dif: del clone[i]
+			# If it fails, `del` head level & 2nd level becomes the new head
+			# having next loop iteration visiting it:
+			if dif <= 0 or dif > max_dif: del clone[i]
 
-				# Otherwise `del` 2nd level. Current level will still be the
-				# head level value next loop iteration:
-				else: del clone[i+1]
+			# Otherwise `del` 2nd level. Current level will still be the
+			# head level value next loop iteration:
+			else: del clone[i+1]
 
-				continue # skips `i += 1`, so next iteration will be same index
+			continue # next iteration will be same index
 
-			# Decide whether to remove the left or the right side of the level
-			# pair by looking behind 1st; that is, previous & right side level:
-			dif = clone[i+1] - clone[i-1] if up else clone[i-1] - clone[i+1]
+		# Decide whether to remove the left or the right side of the level
+		# pair by looking behind 1st; that is, previous & right side level:
+		dif = clone[i+1] - clone[i-1] if up else clone[i-1] - clone[i+1]
 
-			# Check if the lookbehind succeeds. If so `del` current left level.
-			# The right side level will be current left level on next iteration:
-			if 0 < dif <= max_dif: del clone[i]
+		# Check if the lookbehind succeeds. If so `del` current left level.
+		# The right side level will be current left level on next iteration:
+		if 0 < dif <= max_dif: del clone[i]
 
-			else:
-				# Calculate range `dif` between current level & next level after
-				# the right side level (lookahead):
-				dif = clone[i+2] - clone[i] if up else clone[i] - clone[i+2]
+		else:
+			# Calculate range `dif` between current level & next level after
+			# the right side level (lookahead):
+			dif = clone[i+2] - clone[i] if up else clone[i] - clone[i+2]
 
-				# Check if the lookahead succeeds. if so `del` right side level.
-				# And advance the while loop variable so next iteration will be
-				# the level after the deleted right side level:
-				if 0 < dif <= max_dif: del clone[i+1]; i += 1
+			# Check if the lookahead succeeds. if so `del` right side level.
+			# And advance the while loop variable so next iteration will be
+			# the level after the deleted right side level:
+			if 0 < dif <= max_dif: del clone[i+1]; i += 1
 
-				# Otherwise, arbitrarily `del` the current left side level.
-				# Next iteration will be the right side level:
-				else: del clone[i]
-
-			continue # skips `i += 1`, so next iteration will be same index
-
-		i += 1 # move to next iteration if no fail on level pair comparison
+			# Otherwise, arbitrarily `del` the current left side level.
+			# Next iteration will be the right side level:
+			else: del clone[i]
 
 	return True # level sequence is safe if loop fully completed
 
