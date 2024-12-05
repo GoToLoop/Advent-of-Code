@@ -212,7 +212,7 @@ def is_safe_level_sequence(ints: Sequence[int], max_fails=1, max_dif=3):
 		dif = clone[i+1] - clone[i-1] if up else clone[i-1] - clone[i+1]
 
 		# Check if the lookbehind succeeds. If so `del` current left level.
-		# The right side level will be current left level on next iteration:
+		# The right side level will be the current left level on next iteration:
 		if 0 < dif <= max_dif: del clone[i]
 
 		else:
