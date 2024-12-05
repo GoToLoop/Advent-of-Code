@@ -111,7 +111,8 @@ def day_2_part_2_solution():
 	Determines & prints the number of reports that contain safe sequence levels.
 	"""
 
-	safe_level_reports = sum(map(is_safe_level_sequence, level_reports))
+	# Map each inner array to a safety bool, then sum all True values:
+	safe_level_reports = sum( map(is_safe_level_sequence, level_reports) )
 
 	# Print the number of reports that contain safe sequence levels:
 	print(f'{safe_level_reports = }')
