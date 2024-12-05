@@ -44,7 +44,7 @@ def split_and_sort_container_as_two_lists(lines: Iterable[Iterable[int]]):
 	return tuple(lefts), tuple(rights)
 
 
-def solution_1():
+def day_1_part_1_solution():
 	"""
 	Calculates and prints the total distance between corresponding
 	elements of the sorted pairs of values.
@@ -77,7 +77,7 @@ def total_distance(lefts: Sequence[int], rights: Sequence[int]):
 	return sum( abs(rights[idx] - lefts[idx]) for idx in range(len(lefts)) )
 
 
-def solution_2():
+def day_1_part_2_solution():
 	"""
 	Calculates and prints the total similarity between the left
 	integers and the count of the right integers.
@@ -116,5 +116,5 @@ lines = read_file_as_2d_int_tuple()
 # Split and sort the input lines into `lefts` and `rights` lists:
 lefts, rights = split_and_sort_container_as_two_lists(lines)
 
-solution_1() # total_dist = 1651298
-solution_2() # total_similar = 21306195
+day_1_part_1_solution() # total_dist = 1651298
+day_1_part_2_solution() # total_similar = 21306195

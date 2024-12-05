@@ -1,0 +1,9 @@
+name = 'Day 3: Mull It Over'
+version = '1.0.0'
+author_name = 'GoToLoop'
+license = 'Unlicense'
+description = 'https://adventofcode.com/2024/day/3'
+url = 'https://GitHub.com/GoToLoop/Advent-of-Code'
+
+[files]
+"input.txt" = ''
