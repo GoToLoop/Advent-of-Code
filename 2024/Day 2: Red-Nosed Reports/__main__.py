@@ -62,7 +62,7 @@ def is_ascending(ints: Sequence[int]):
 	return None if len(ints) < 2 or ints[0] == ints[1] else ints[0] < ints[1]
 
 
-def is_always_ascending(ints: Sequence[int], max_dif=3):
+def is_always_ascending(ints: Sequence[int], max_diff=3):
 	"""
 	Checks if the sequence of positive integers is strictly ascending with
 	differences	within a specified maximum difference.
@@ -70,21 +70,21 @@ def is_always_ascending(ints: Sequence[int], max_dif=3):
 	Args:
 		ints (Sequence[int]): A sequence of positive integers to check.
 
-		max_dif (int): Maximum allowed difference between consecutive integers.
+		max_diff (int): Maximum allowed difference between consecutive integers.
 
     Returns:
 		bool: True if the sequence is strictly ascending and each difference is
-		within `max_dif`. False if any two adjacent elements are equal,
-		descending, or exceed `max_dif`.
+		within `max_diff`. False if any two adjacent elements are equal,
+		descending, or exceed `max_diff`.
 	"""
 
 	for i in range(len(ints) - 1):
 		diff = ints[i + 1] - ints[i]
-		if diff <= 0 or diff > max_dif: return False
+		if diff <= 0 or diff > max_diff: return False
 	return True
 
 
-def is_always_descending(ints: Sequence[int], max_dif=3):
+def is_always_descending(ints: Sequence[int], max_diff=3):
 	"""
 	Checks if the sequence of positive integers is strictly descending with
 	differences	within a specified maximum difference.
@@ -92,17 +92,17 @@ def is_always_descending(ints: Sequence[int], max_dif=3):
 	Args:
 		ints (Sequence[int]): A sequence of positive integers to check.
 
-		max_dif (int): Maximum allowed difference between consecutive integers.
+		max_diff (int): Maximum allowed difference between consecutive integers.
 
     Returns:
 		bool: True if the sequence is strictly descending and each difference is
-		within `max_dif`. False if any two adjacent elements are equal,
-		ascending, or exceed `max_dif`.
+		within `max_diff`. False if any two adjacent elements are equal,
+		ascending, or exceed `max_diff`.
 	"""
 
 	for i in range(len(ints) - 1):
 		diff = ints[i] - ints[i + 1]
-		if diff <= 0 or diff > max_dif: return False
+		if diff <= 0 or diff > max_diff: return False
 	return True
 
 
@@ -142,11 +142,11 @@ def is_really_ascending(ints: Sequence[int], max_fails=1):
 		else: return ints[i] < ints[i + 1]
 
 
-def is_safe_level_sequence(ints: Sequence[int], max_fails=1, max_dif=3):
+def is_safe_level_sequence(ints: Sequence[int], max_fails=1, max_diff=3):
 	"""
 	Checks if a reactor report of sequence levels are within safety limits.
 	Levels should always be increasing or decreasing, never staying the same.
-	Also, the level change readings should never be higher than `max_dif`.
+	Also, the level change readings should never be higher than `max_diff`.
 	However, the reactor has a fail tolerance of up to `max_fails`.
 
 	Args:
@@ -154,14 +154,14 @@ def is_safe_level_sequence(ints: Sequence[int], max_fails=1, max_dif=3):
 
 		max_fails (int): Maximum tolerance for bad level readings.
 
-		max_dif (int): Maximum allowed difference between consecutive levels.
+		max_diff (int): Maximum allowed difference between consecutive levels.
 
 	Returns:
 		bool: True if the level sequence is safe. False if it's unsafe.
 	"""
 
 	# Make sure params are positive:
-	max_fails = abs(max_fails); max_dif = abs(max_dif)
+	max_fails = abs(max_fails); max_diff = abs(max_diff)
 
 	# "Unsafe" if no direction was found after more than `max_fails` attempts.
 	# Otherwise, store the initial direction of the sequence in `up0`:
@@ -173,17 +173,17 @@ def is_safe_level_sequence(ints: Sequence[int], max_fails=1, max_dif=3):
 	while i < tail: # loop ends at penultimate level value
 
 		# Range subtraction order based on initial ascend or descend:
-		dif = clone[i+1] - clone[i] if up else clone[i] - clone[i+1]
+		diff = clone[i+1] - clone[i] if up else clone[i] - clone[i+1]
 
-		# Update current direction `up` based on `dif` comparison & initial
+		# Update current direction `up` based on `diff` comparison & initial
 		# direction `up0`:
-		up = dif > 0 if up0 else dif < 0
+		up = diff > 0 if up0 else diff < 0
 
-		# Skip to next iteration if no fail on `dif` level pair comparison:
-		if 0 < dif <= max_dif: i += 1; continue
+		# Skip to next iteration if no fail on `diff` level pair comparison:
+		if 0 < diff <= max_diff: i += 1; continue
 
-		# Fails if `dif` is more than `max_dif` or there was no change or `dif`
-		# was negative; meaning an unexpected direction change occurred
+		# Fails if `diff` is more than `max_diff` or there was no change or
+		# `diff` was negative; meaning an unexpected direction change occurred.
 
 		# Decrease attempts and return "unsafe" if no attemps are left:
 		if (max_fails := max_fails - 1) < 0: return False
@@ -195,12 +195,12 @@ def is_safe_level_sequence(ints: Sequence[int], max_fails=1, max_dif=3):
 		# If we're checking the head level, lookahead to 3rd level value:
 		if i == 0:
 
-			# Find range `dif` between 1st & 3rd level values:
-			dif = clone[i+2] - clone[i] if up else clone[i] - clone[i+2]
+			# Find range `diff` between 1st & 3rd level values:
+			diff = clone[i+2] - clone[i] if up else clone[i] - clone[i+2]
 
 			# If it fails, `del` head level & 2nd level becomes the new head
 			# having next loop iteration visiting it:
-			if dif <= 0 or dif > max_dif: del clone[i]
+			if diff <= 0 or diff > max_diff: del clone[i]
 
 			# Otherwise `del` 2nd level. Current level will still be the head
 			# level value next loop iteration:
@@ -210,21 +210,21 @@ def is_safe_level_sequence(ints: Sequence[int], max_fails=1, max_dif=3):
 
 		# Decide whether to remove the left or the right side of the level pair
 		# by looking behind 1st; that is, previous & right side level:
-		dif = clone[i+1] - clone[i-1] if up else clone[i-1] - clone[i+1]
+		diff = clone[i+1] - clone[i-1] if up else clone[i-1] - clone[i+1]
 
 		# Check if the lookbehind succeeds. If so `del` current left level.
 		# The right side level will be the current left level on next iteration:
-		if 0 < dif <= max_dif: del clone[i]
+		if 0 < diff <= max_diff: del clone[i]
 
 		else:
-			# Calculate range `dif` between current level & next level after
+			# Calculate range `diff` between current level & next level after
 			# the right side level (lookahead):
-			dif = clone[i+2] - clone[i] if up else clone[i] - clone[i+2]
+			diff = clone[i+2] - clone[i] if up else clone[i] - clone[i+2]
 
 			# Check if the lookahead succeeds. if so `del` right side level.
 			# And advance the while loop variable so next iteration will be the
 			# level after the deleted right side level:
-			if 0 < dif <= max_dif: del clone[i+1]; i += 1
+			if 0 < diff <= max_diff: del clone[i+1]; i += 1
 
 			# Otherwise, arbitrarily `del` the current left side level.
 			# Next iteration will be the right side level:
