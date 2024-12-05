@@ -181,8 +181,8 @@ def is_safe_level_sequence(ints: Sequence[int], max_fails=1, max_dif=3):
 		# Skip to next iteration if no fail on `dif` level pair comparison:
 		if 0 < dif <= max_dif: i += 1; continue
 
-		# Fails if `dif` is more than `max_dif` or there was no change or
-		# `dif` was negative; meaning an unexpected direction change occurred
+		# Fails if `dif` is more than `max_dif` or there was no change or `dif`
+		# was negative; meaning an unexpected direction change occurred
 
 		# Decrease attempts and return "unsafe" if no attemps are left:
 		if (max_fails := max_fails - 1) < 0: return False
@@ -201,14 +201,14 @@ def is_safe_level_sequence(ints: Sequence[int], max_fails=1, max_dif=3):
 			# having next loop iteration visiting it:
 			if dif <= 0 or dif > max_dif: del clone[i]
 
-			# Otherwise `del` 2nd level. Current level will still be the
-			# head level value next loop iteration:
+			# Otherwise `del` 2nd level. Current level will still be the head
+			# level value next loop iteration:
 			else: del clone[i+1]
 
 			continue # next iteration will be same index
 
-		# Decide whether to remove the left or the right side of the level
-		# pair by looking behind 1st; that is, previous & right side level:
+		# Decide whether to remove the left or the right side of the level pair
+		# by looking behind 1st; that is, previous & right side level:
 		dif = clone[i+1] - clone[i-1] if up else clone[i-1] - clone[i+1]
 
 		# Check if the lookbehind succeeds. If so `del` current left level.
@@ -221,8 +221,8 @@ def is_safe_level_sequence(ints: Sequence[int], max_fails=1, max_dif=3):
 			dif = clone[i+2] - clone[i] if up else clone[i] - clone[i+2]
 
 			# Check if the lookahead succeeds. if so `del` right side level.
-			# And advance the while loop variable so next iteration will be
-			# the level after the deleted right side level:
+			# And advance the while loop variable so next iteration will be the
+			# level after the deleted right side level:
 			if 0 < dif <= max_dif: del clone[i+1]; i += 1
 
 			# Otherwise, arbitrarily `del` the current left side level.
