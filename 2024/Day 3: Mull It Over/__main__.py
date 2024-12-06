@@ -1,186 +1,104 @@
 #!/usr/bin/env python
 
-from collections.abc import Sequence
-from array import array
+from collections.abc import Iterable
+import re
 
-def read_file_as_2d_int_tuple(filename='input.txt'):
-	"""
-	Reads a file and converts its lines into a 2D tuple of integers.
+# Regex pattern to match "mul(xxx,yyy)", "do()", and "don't()":
+MULTIPLICATION_PATTERN = re.compile(r'''
+	mul\(
+		(\d{1,3})	# (1) captured multiplicand integer (1 to 3 digits)
+		,			# non-captured comma character
+		(\d{1,3}) 	# (2) captured multiplier integer (1 to 3 digits)
+	\)
+    |
+    	do\(\) 		# match the literal string "do()"
+    |
+    	don't\(\) 	# match the literal string "don't()"
+''', re.VERBOSE)
+
+def read_whole_file(filename='input.txt'):
+	"""Reads the file and returns its entire content as a string.
 
 	Arg:
 		filename (str): Name of the file to read from. Defaults to 'input.txt'.
 
 	Returns:
-		tuple[array[int], ...]: A tuple where each of its inner uint8 arrays
-		contains 5 to 8 integers.
+		str: the full content of the file as a string.
 	"""
 
-	with open(filename) as f: return *(
-		array('B', map(int, line.split()) ) for line in f.readlines()
-	),
+	with open(filename) as f: return f.read()
 
 
-def day_2_part_1_solution():
-	"""
-	Calculates and prints the total number of safe level reports.
-
-	A safe level report is one where the sequence of integers is either
-	strictly ascending within a specified maximum difference or strictly
-	descending within the same limit.
-
-	Additionally, consecutive levels must not repeat.
-
-	The function reads level reports, checks each report for safety based on
-	the defined criteria, and counts the number of safe reports.
-	"""
-
-	safe_level_reports = 0
-
-	for levels in level_reports:
-		if (ascending := is_ascending(levels)) is not None:
-			if ascending:
-				if is_always_ascending(levels): safe_level_reports += 1
-			elif is_always_descending(levels): safe_level_reports += 1
-
-	# Print the number of reports that contain safe sequence levels:
-	print(f'{safe_level_reports = }')
-
-
-def is_ascending(ints: Sequence[int]):
-	"""
-	Determines if a sequence is initially ascending.
+def mul(groups: Iterable[str]):
+	"""Converts captured groups to integers, multiplies them, and returns their
+	product.
 
 	Arg:
-		ints (Sequence[int]): A sequence of integers to check.
+		groups (Iterable[str]): Captured groups from the regex match.
 
 	Returns:
-		Optional[bool]: None if the sequence has fewer than 2 elements or the
-		first two elements are equal. True if the first two elements are in
-		ascending order. False otherwise.
+		int: The product of the converted integer groups.
 	"""
 
-	return None if len(ints) < 2 or ints[0] == ints[1] else ints[0] < ints[1]
+	factor_pair = map(int, groups) # convert captured groups to integers
+	product = multiplier(factor_pair) # and multiply the factors
+
+	return product # and then return their product
 
 
-def is_always_ascending(ints: Sequence[int], max_dif=3):
-	"""
-	Checks if the sequence of positive integers is strictly ascending with
-	differences	within a specified maximum difference.
-
-	Args:
-		ints (Sequence[int]): A sequence of positive integers to check.
-
-		max_dif (int): Maximum allowed difference between consecutive integers.
-
-    Returns:
-		bool: True if the sequence is strictly ascending and each difference is
-		within `max_dif`. False if any two adjacent elements are equal,
-		descending, or exceed `max_dif`.
-	"""
-
-	for i in range(len(ints) - 1):
-		diff = ints[i + 1] - ints[i]
-		if diff <= 0 or diff > max_dif: return False
-	return True
-
-
-def is_always_descending(ints: Sequence[int], max_dif=3):
-	"""
-	Checks if the sequence of positive integers is strictly descending with
-	differences	within a specified maximum difference.
-
-	Args:
-		ints (Sequence[int]): A sequence of positive integers to check.
-
-		max_dif (int): Maximum allowed difference between consecutive integers.
-
-    Returns:
-		bool: True if the sequence is strictly descending and each difference is
-		within `max_dif`. False if any two adjacent elements are equal,
-		ascending, or exceed `max_dif`.
-	"""
-
-	for i in range(len(ints) - 1):
-		diff = ints[i] - ints[i + 1]
-		if diff <= 0 or diff > max_dif: return False
-	return True
-
-
-def day_2_part_2_solution():
-	"""
-
-	"""
-
-	safe_level_reports = sum(map(is_always_going_same_direction, level_reports))
-
-	# Print the number of reports that contain safe sequence levels:
-	print(f'{safe_level_reports = }')
-
-
-def is_really_ascending(ints: Sequence[int], max_fails=1):
-	"""
-	Determines if a sequence is initially ascending.
+def multiplier(factor_pair: Iterable[int]):
+	"""Multiplies two integers from the given iterable.
 
 	Arg:
-		ints (Sequence[int]): A sequence of integers to check.
+		factor_pair (Iterable[int]): A pair of integers to multiply.
 
 	Returns:
-		Optional[bool]: None if the sequence has fewer than 2 elements or the
-		first two elements are equal. True if the first two elements are in
-		ascending order. False otherwise.
+		int: The product of the two integers.
 	"""
 
-	if (size := len(ints)) < 2: return None
+	multiplicand, multiplier = factor_pair
+	product = multiplicand * multiplier
 
-	for i in range(size - 1):
-		if ints[i] == ints[i + 1]:
-			if (max_fails := max_fails - 1) < 0: return print(f"\nFAIL!!!\n{ints = }\n")
-
-		else: return ints[i] < ints[i + 1]
+	return product
 
 
-def is_always_going_same_direction(ints: Sequence[int], max_fails=1, max_dif=3):
-	"""
+def day_3_part_1_solution():
+	"""Calculates the sum of all products found in the multiplication script."""
 
-	"""
+	sum_of_products = int(0) # sum collector for each found product
 
-	if (up := is_really_ascending(ints, max_fails)) is None: return False
+	# Iterate over all matches found by the regex in the multiplication script:
+	for match in MULTIPLICATION_PATTERN.finditer(multiplication_script):
+		if all(groups := match.groups()): # ensure we've got captured groups
+			product = mul(groups) # multiply the captured groups
+			sum_of_products += product # then add their product to the sum
 
-	print(f'Initial direction: {"ascending" if up else "descending"}')
-
-	i = int(0)
-	tail = len(clone := [*ints]) - 1
-
-	while i < tail:
-		diff = clone[i + 1] - clone[i] if up else clone[i] - clone[i + 1]
-
-		print(f'Checking {clone}, idx: {i}, diff: {diff}, max_fails: {max_fails}')
-
-		if diff <= 0 or diff > max_dif:
-			if (max_fails := max_fails - 1) < 0: return print(False) or False
-
-			if i == (tail := tail - 1): break
-
-			if i == 0:
-				del clone[i]
-				continue
+	# Print the total sum of all multiplied found pairs:
+	print(f'{sum_of_products = }')
 
 
-			if abs(clone[i + 2] - clone[i]) <= max_dif:
-				del clone[i + 1]
-			else:
-				del clone[i]
-				i -= 1
+def day_3_part_2_solution():
+	"""Calculates the sum of all products found in the multiplication script
+	with conditional enablement."""
 
-			continue
+	sum_of_products = int(0) # sum collector for each found & enabled product
+	enabled = True # "do()" enables "mul()" and "don't()" disables it
 
-		i += 1
+	# Iterate over all matches found by the regex in the multiplication script:
+	for match in MULTIPLICATION_PATTERN.finditer(multiplication_script):
+		if (group := match.group()) == "do()": enabled = True
+		elif group == "don't()": enabled = False
 
-	return print(True) or True
+		elif enabled: # only multiply if last instruction was "do()"
+			groups = match.groups() # grab the 2 captured factors 
+			product = mul(groups) # then multiply them
+			sum_of_products += product # collect their product result as a sum
+
+	# Print the total sum of all multiplied found & enabled pairs:
+	print(f'{sum_of_products = }')
 
 
-# Read the input file and convert it to a tuple of uint8 arrays:
-level_reports = read_file_as_2d_int_tuple()
+multiplication_script = read_whole_file()
 
-day_2_part_1_solution() # safe_level_reports = 663
-day_2_part_2_solution() # safe_level_reports = 687
+day_3_part_1_solution() # sum_of_products = 182619815
+day_3_part_2_solution() # sum_of_products = 80747545
