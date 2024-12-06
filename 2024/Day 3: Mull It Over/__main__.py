@@ -3,10 +3,9 @@
 from collections.abc import Iterable
 import re
 
-FILENAME = 'input.txt'
+FILENAMES = 'input.txt', 'example1.txt', 'example2.txt'
 
-# FILENAME = 'example1.txt' # 161
-# FILENAME = 'example2.txt' # 48
+FILENAME = FILENAMES[0]
 
 # Regex pattern to match "mul(xxx,yyy)", "do()", and "don't()":
 MULTIPLICATION_PATTERN = re.compile(r'''
