@@ -3,6 +3,11 @@
 from collections.abc import Iterable
 import re
 
+FILENAME = 'input.txt'
+
+# FILENAME = 'example1.txt' # 161
+# FILENAME = 'example2.txt' # 48
+
 # Regex pattern to match "mul(xxx,yyy)", "do()", and "don't()":
 MULTIPLICATION_PATTERN = re.compile(r'''
 	mul\(
@@ -16,11 +21,11 @@ MULTIPLICATION_PATTERN = re.compile(r'''
     	don't\(\) 	# match the literal string "don't()"
 ''', re.VERBOSE)
 
-def read_whole_file(filename='input.txt'):
+def read_whole_file(filename=FILENAME):
 	"""Reads the file and returns its entire content as a string.
 
 	Arg:
-		filename (str): Name of the file to read from. Defaults to 'input.txt'.
+		filename (str): Name of the file to read from. Defaults to FILENAME.
 
 	Returns:
 		str: the full content of the file as a string.
