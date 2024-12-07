@@ -3,7 +3,7 @@
 from collections.abc import Iterable
 import re
 
-FILENAMES = 'input.txt', 'example1.txt', 'example2.txt'
+FILENAMES = 'input.txt', 'sample1.txt', 'sample2.txt' # 161, 48
 FILENAME = FILENAMES[0]
 
 # Regex pattern to match "mul(xxx,yyy)", "do()", and "don't()":
@@ -44,7 +44,7 @@ def mul(str_pair: Iterable[str]):
 	"""
 
 	int_pair = map(int, str_pair) # convert captured groups to integers
-	product = multiplier(int_pair) # and multiply the factors
+	product = multiplier(int_pair) # and multiply the converted factors
 
 	return product # and then return their product
 

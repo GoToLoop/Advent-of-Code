@@ -4,12 +4,15 @@ from collections import Counter
 from collections.abc import Iterable, Sequence
 from typing import cast
 
-def read_file_as_2d_int_tuple(filename='input.txt'):
+FILENAMES = 'input.txt', 'sample.txt' # 11, 31
+FILENAME = FILENAMES[0]
+
+def read_file_as_2d_int_tuple(filename=FILENAME):
 	"""
 	Reads a file and converts its lines into a 2D tuple of integers.
 
 	Arg:
-		filename (str): Name of the file to read from. Defaults to 'input.txt'.
+		filename (str): Name of the file to read from. Defaults to FILENAME.
 
 	Returns:
 		tuple[tuple[int, int], ...]: A 2D tuple where each inner tuple contains

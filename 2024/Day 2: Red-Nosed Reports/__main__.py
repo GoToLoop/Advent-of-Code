@@ -3,12 +3,15 @@
 from collections.abc import Sequence
 from array import array
 
-def read_file_as_2d_int_tuple(filename='input.txt'):
+FILENAMES = 'input.txt', 'sample.txt' # 2, 4 [5?]
+FILENAME = FILENAMES[1]
+
+def read_file_as_2d_int_tuple(filename=FILENAME):
 	"""
 	Reads a file and converts its lines into a 2D tuple of integers.
 
 	Arg:
-		filename (str): Name of the file to read from. Defaults to 'input.txt'.
+		filename (str): Name of the file to read from. Defaults to FILENAME.
 
 	Returns:
 		tuple[array[int], ...]: A tuple where each of its inner uint8 arrays
