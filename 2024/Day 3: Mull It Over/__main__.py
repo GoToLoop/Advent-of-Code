@@ -4,7 +4,6 @@ from collections.abc import Iterable
 import re
 
 FILENAMES = 'input.txt', 'example1.txt', 'example2.txt'
-
 FILENAME = FILENAMES[0]
 
 # Regex pattern to match "mul(xxx,yyy)", "do()", and "don't()":
@@ -33,34 +32,34 @@ def read_whole_file(filename=FILENAME):
 	with open(filename) as f: return f.read()
 
 
-def mul(groups: Iterable[str]):
-	"""Converts captured groups to integers, multiplies them, and returns their
-	product.
+def mul(str_pair: Iterable[str]):
+	"""Converts the two captured factors to integers, multiplies them, and
+	returns their product.
 
 	Arg:
-		groups (Iterable[str]): Captured groups from the regex match.
+		str_pair (Iterable[str]): Captured groups from the regex match.
 
 	Returns:
 		int: The product of the converted integer groups.
 	"""
 
-	factor_pair = map(int, groups) # convert captured groups to integers
-	product = multiplier(factor_pair) # and multiply the factors
+	int_pair = map(int, str_pair) # convert captured groups to integers
+	product = multiplier(int_pair) # and multiply the factors
 
 	return product # and then return their product
 
 
-def multiplier(factor_pair: Iterable[int]):
+def multiplier(int_pair: Iterable[int]):
 	"""Multiplies two integers from the given iterable.
 
 	Arg:
-		factor_pair (Iterable[int]): A pair of integers to multiply.
+		int_pair (Iterable[int]): A pair of integers to multiply.
 
 	Returns:
 		int: The product of the two integers.
 	"""
 
-	multiplicand, multiplier = factor_pair
+	multiplicand, multiplier, *_ = int_pair
 	product = multiplicand * multiplier
 
 	return product
@@ -73,8 +72,8 @@ def day_3_part_1_solution():
 
 	# Iterate over all matches found by the regex in the multiplication script:
 	for match in MULTIPLICATION_PATTERN.finditer(multiplication_script):
-		if all(groups := match.groups()): # ensure we've got captured groups
-			product = mul(groups) # multiply the captured groups
+		if all(captures := match.groups()): # ensure we've got captured groups
+			product = mul(captures) # multiply the captured factors
 			sum_of_products += product # then add their product to the sum
 
 	# Print the total sum of all multiplied found pairs:
@@ -90,12 +89,12 @@ def day_3_part_2_solution():
 
 	# Iterate over all matches found by the regex in the multiplication script:
 	for match in MULTIPLICATION_PATTERN.finditer(multiplication_script):
-		if (group := match.group()) == "do()": enabled = True
-		elif group == "don't()": enabled = False
+		if (instruction := match.group()) == "do()": enabled = True
+		elif instruction == "don't()": enabled = False
 
-		elif enabled: # only multiply if last instruction was "do()"
-			groups = match.groups() # grab the 2 captured factors 
-			product = mul(groups) # then multiply them
+		elif enabled: # only multiply if most current `instruction` is "do()"
+			captures = match.groups() # grab the 2 captured factors 
+			product = mul(captures) # then multiply the captured factors
 			sum_of_products += product # collect their product result as a sum
 
 	# Print the total sum of all multiplied found & enabled pairs:
